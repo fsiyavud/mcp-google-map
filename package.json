@@ -16,6 +16,7 @@
     "build": "tsup --dts",
     "start": "node dist/cli.js",
     "dev": "cross-env NODE_ENV=development tsup --watch",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "prepublishOnly": "npm run build"
   },
   "engines": {

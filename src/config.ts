@@ -1,6 +1,7 @@
 import { ToolConfig } from "./core/BaseMcpServer.js";
 
 // Import tool definitions
+import { TextSearch, TextSearchParams } from "./tools/maps/textSearch.js";
 import { SearchNearby, SearchNearbyParams } from "./tools/maps/searchNearby.js";
 import { PlaceDetails, PlaceDetailsParams } from "./tools/maps/placeDetails.js";
 import { Geocode, GeocodeParams } from "./tools/maps/geocode.js";
@@ -8,6 +9,7 @@ import { ReverseGeocode, ReverseGeocodeParams } from "./tools/maps/reverseGeocod
 import { DistanceMatrix, DistanceMatrixParams } from "./tools/maps/distanceMatrix.js";
 import { Directions, DirectionsParams } from "./tools/maps/directions.js";
 import { Elevation, ElevationParams } from "./tools/maps/elevation.js";
+import { RoutesOptimize, RoutesOptimizeParams } from "./tools/maps/routesOptimize.js";
 interface ServerInstanceConfig {
   // Renamed from ServerConfig and modified
   name: string;
@@ -20,6 +22,12 @@ const serverConfigs: ServerInstanceConfig[] = [
     name: "MCP-Server",
     portEnvVar: "MCP_SERVER_PORT",
     tools: [
+      {
+        name: TextSearch.NAME,
+        description: TextSearch.DESCRIPTION,
+        schema: TextSearch.SCHEMA,
+        action: (params: TextSearchParams) => TextSearch.ACTION(params),
+      },
       {
         name: SearchNearby.NAME,
         description: SearchNearby.DESCRIPTION,
@@ -61,6 +69,12 @@ const serverConfigs: ServerInstanceConfig[] = [
         description: Elevation.DESCRIPTION,
         schema: Elevation.SCHEMA,
         action: (params: ElevationParams) => Elevation.ACTION(params),
+      },
+      {
+        name: RoutesOptimize.NAME,
+        description: RoutesOptimize.DESCRIPTION,
+        schema: RoutesOptimize.SCHEMA,
+        action: (params: RoutesOptimizeParams) => RoutesOptimize.ACTION(params),
       },
     ],
   },

@@ -28,6 +28,7 @@ All tools and features are confirmed functional through real-world testing.
 ### 🆕 Latest Updates
 
  - ℹ️  **Reminder: enable Places API (New) in https://console.cloud.google.com before using the new Place features.**
+ - 🧭 Added `places_text_search` and `routes_optimize` tools for global disambiguation and multi-stop routing.
 
 
 ### 🗺️ Google Maps Integration
@@ -36,6 +37,7 @@ All tools and features are confirmed functional through real-world testing.
 
   - Search for places near a specific location with customizable radius and filters
   - Get detailed place information including ratings, opening hours, and contact details
+  - Resolve global free-form text queries into precise candidates with `is_area` hints
 
 - **Geocoding Services**
 
@@ -47,6 +49,7 @@ All tools and features are confirmed functional through real-world testing.
   - Calculate distances and travel times between multiple origins and destinations
   - Get detailed turn-by-turn directions between two points
   - Support for different travel modes (driving, walking, bicycling, transit)
+  - Optimize waypoint order with live traffic, returning encoded polylines ready for map rendering
 
 - **Elevation Data**
   - Retrieve elevation data for specific locations
@@ -116,7 +119,7 @@ GOOGLE_MAPS_API_KEY=YOUR_API_KEY npx @cablate/mcp-google-map
 
 - **Endpoint**: `http://localhost:3000/mcp`
 - **Transport**: HTTP (not stdio)
-- **Tools**: 8 Google Maps tools available
+- **Tools**: 9 Google Maps tools available
 
 ### API Key Configuration
 
@@ -156,13 +159,15 @@ The server provides the following tools:
 
 ### Google Maps Tools
 
-1. **search_nearby** - Search for nearby places based on location, with optional filtering by keywords, distance, rating, and operating hours
-2. **get_place_details** - Get detailed information about a specific place including contact details, reviews, ratings, and operating hours
-3. **maps_geocode** - Convert addresses or place names to geographic coordinates (latitude and longitude)
-4. **maps_reverse_geocode** - Convert geographic coordinates to a human-readable address
-5. **maps_distance_matrix** - Calculate travel distances and durations between multiple origins and destinations
-6. **maps_directions** - Get detailed turn-by-turn navigation directions between two locations
-7. **maps_elevation** - Get elevation data (height above sea level) for specific geographic locations
+1. **places_text_search** - Resolve global, free-form text into candidate places and flag ambiguous areas for clarification
+2. **search_nearby** - Search for nearby places based on location, with optional filtering by keywords, distance, rating, and operating hours
+3. **get_place_details** - Get detailed information about a specific place including contact details, reviews, ratings, and operating hours
+4. **maps_geocode** - Convert addresses or place names to geographic coordinates (latitude and longitude)
+5. **maps_reverse_geocode** - Convert geographic coordinates to a human-readable address
+6. **maps_distance_matrix** - Calculate travel distances and durations between multiple origins and destinations
+7. **maps_directions** - Get detailed turn-by-turn navigation directions between two locations
+8. **maps_elevation** - Get elevation data (height above sea level) for specific geographic locations
+9. **routes_optimize** - Reorder waypoints for minimum time/distance and return encoded polylines plus leg summaries
 
 ## Development
 
@@ -199,17 +204,22 @@ src/
 ├── index.ts                  # Package exports
 ├── core/
 │   └── BaseMcpServer.ts     # Base MCP server with streamable HTTP
+├── services/
+│   ├── NewPlacesService.ts   # Places API (New) helpers
+│   ├── PlacesSearcher.ts     # Legacy client + wrappers
+│   ├── RoutesService.ts      # Routes Preferred + fallback
+│   └── TextSearchService.ts  # Text search helper
 └── tools/
-    └── maps/                # Google Maps tools
-        ├── toolclass.ts     # Google Maps API client
-        ├── searchPlaces.ts  # Maps service layer
-        ├── searchNearby.ts  # Search nearby places
-        ├── placeDetails.ts  # Place details
-        ├── geocode.ts       # Geocoding
+    └── maps/                 # Google Maps tools
+        ├── textSearch.ts     # places_text_search tool
+        ├── searchNearby.ts   # Nearby search
+        ├── placeDetails.ts   # Place details
+        ├── geocode.ts        # Geocoding
         ├── reverseGeocode.ts # Reverse geocoding
         ├── distanceMatrix.ts # Distance matrix
-        ├── directions.ts    # Directions
-        └── elevation.ts     # Elevation data
+        ├── directions.ts     # Directions
+        ├── elevation.ts      # Elevation data
+        └── routesOptimize.ts # Multi-stop route optimizer
 ```
 
 ## Tech Stack

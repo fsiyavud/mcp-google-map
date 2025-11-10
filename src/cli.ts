@@ -31,7 +31,7 @@ export async function startServer(port?: number, apiKey?: string): Promise<void>
   }
 
   Logger.log("🚀 Starting Google Maps MCP Server...");
-  Logger.log("📍 Available tools: search_nearby, get_place_details, maps_geocode, maps_reverse_geocode, maps_distance_matrix, maps_directions, maps_elevation, echo");
+  Logger.log("📍 Available tools: places_text_search, search_nearby, get_place_details, maps_geocode, maps_reverse_geocode, maps_distance_matrix, maps_directions, maps_elevation, routes_optimize, echo");
   Logger.log("ℹ️  Reminder: enable Places API (New) in https://console.cloud.google.com before using the new Place features.");
   Logger.log("");
 

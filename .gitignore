@@ -1,5 +1,6 @@
 dist/
 node_modules/
+.npm/
 credentials.json
 .env
 .agents/*
